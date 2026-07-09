@@ -150,6 +150,18 @@ ops/           Standard-library scripts: source intake, bank checks, workspace s
 CLAUDE.md      The always-on objective every stage reads: maximum truthful match.
 ```
 
+## The template
+
+Resumes render with Jake Gutierrez's classic one-column LaTeX layout. The model never
+writes LaTeX: it writes resume content as JSON, and `ops/render.py` turns that into
+`.tex` deterministically. Every layout decision and all character escaping live in
+code, so no content the model writes can break the formatting.
+
+A template is one declarative module in `ops/templates/`: a `SKELETON` holding the
+document layout with named slots, and `FRAGMENTS` holding the markup for each kind of
+content. `jake.py` is the reference; `ops/templates/README.md` has the full contract
+and the steps to add your own.
+
 ## Credits
 
 The LaTeX resume template is adapted from Jake Gutierrez's widely used
