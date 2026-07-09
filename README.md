@@ -1,5 +1,9 @@
 # resumery
- 
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Runs in Claude Code](https://img.shields.io/badge/runs%20in-Claude%20Code-D97757)](https://claude.com/claude-code)
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB)
+
 Turn your career history into a structured evidence bank, then tailor a truthful one-page resume to any job posting. Runs inside Claude Code.
 
 ## What it is
@@ -13,8 +17,7 @@ The bank is the foundation. A tailored resume is one query against it.
 
 ## Requirements
 
-- **[Claude Code](https://claude.com/claude-code)**, where the whole pipeline runs. A Claude
-  subscription is enough; no API key required.
+- **[Claude Code](https://claude.com/claude-code)**
 - **A LaTeX distribution** providing `pdflatex` plus the template's packages (`titlesec`,
   `marvosym`, `enumitem`, `fullpage`, `fancyhdr`, `tabularx`, `hyperref`):
     - Debian/Ubuntu: `sudo apt install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended`
@@ -83,8 +86,18 @@ Give `/tailor` a job posting in whichever form you have:
 ```
 
 The run drafts a resume from your bank, has an independent pass check it against the posting
-and your bank, applies fixes, and compiles the PDF. When it finishes it hands you the exact
-path:
+and your bank, applies fixes, and compiles the PDF. Every draft is compiled and measured as
+it's written, and the run isn't done until every check comes back clean:
+
+- the content validates against the resume schema and the LaTeX compiles
+- the page fills exactly one page, measured from the PDF itself, in both directions
+  (no overflow, no under-fill)
+- craft lints catch an over-long bullet or two bullets in a role opening on the same verb
+- a keyword gate diffs the posting's keywords against your bank, the draft, and the gap
+  report: a true skill surfaces under the posting's spelling, and anything the bank can't
+  back is recorded as a gap instead
+
+When it finishes it hands you the exact path:
 
 ```
 applications/2026-06-30_acme_data-engineer/
@@ -101,16 +114,17 @@ and what to be ready to speak to. Nothing is ever papered over.
 Re-running `/tailor` on the same posting reuses its folder. `applications/index.md` tracks
 everything you've tailored.
 
-> Two-page resume? Set `RESUME_MAX_PAGES=2` in the environment before the run.
-
 ## The rule: claims vs. framing
 
 Everything on a generated resume traces back to your bank. The pipeline draws a hard line:
 
 - **Claims** are checkable facts: titles, employers, dates, whether an accomplishment
   happened, the numbers behind it. These must be true, always. This layer has no wiggle room.
+  Code fills it straight from your record; the model never writes your dates or employers.
 - **Framing** is how true work is presented: which experience leads, which bullets are
-  chosen, the words describing real work. This is optimized freely for each posting.
+  chosen, the words describing real work. This is optimized freely for each posting, down
+  to matching the posting's spelling of a skill you really have ("Go (Golang)"); ATS
+  software matches strings, and which variant of a true name you print costs nothing in truth.
 
 Reframing your real experience to fit a job is the whole point. Inventing experience,
 outcomes, or numbers is the one thing the system will not do; an independent grounding
