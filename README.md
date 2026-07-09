@@ -139,4 +139,5 @@ CLAUDE.md      The always-on objective every stage reads: maximum truthful match
 ## Credits
 
 The LaTeX resume template is adapted from Jake Gutierrez's widely used
-[resume template](https://github.com/sb2nov/resume). See `LICENSE` for this project's terms.
+[resume template](https://github.com/jakegut/resume), itself based on
+[sb2nov/resume](https://github.com/sb2nov/resume). See `LICENSE` for this project's terms.
