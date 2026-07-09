@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "parsed_jd.json",
+  "description": "Structured metadata extracted from the raw posting (the workspace's jd.txt), for NAMING, TRACKING, and IDENTITY (recognizing a re-tailored posting), plus the keyword lists that ops/keyword_check.py greps for the deterministic keyword gate. It is NOT an input to the draft or fix agents; those must read the raw jd.txt. Written once by jd-parse when the application is first tailored; never rewritten on reuse; never blocks a run. The posting's URL is NOT a field here: it is code-owned end to end (the staging namespace's url file -> new_workspace.py -> the workspace's one-line .run/posting_url file).",
+  "type": "object",
+  "required": ["id", "date_parsed", "location"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The applications/<id>/ folder name, authored by code (ops/new_workspace.py): YYYY-MM-DD_<kebab(company)>_<kebab(role_title)>, truncated and collision-suffixed. The parser copies the folder's basename; it never invents an id."
+    },
+    "company": {
+      "type": ["string", "null"],
+      "description": "Hiring company as named in the JD; null if not stated."
+    },
+    "role_title": {
+      "type": ["string", "null"],
+      "description": "Role title as named in the JD; null if not stated."
+    },
+    "date_parsed": {
+      "type": "string",
+      "description": "ISO date (YYYY-MM-DD) the JD was parsed. Code-stamped from the clock, not model-authored."
+    },
+    "location": {
+      "type": "object",
+      "required": ["mode"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["remote", "hybrid", "onsite", "unspecified"],
+          "description": "Work mode. Use \"unspecified\" when the JD does not state it; never guess."
+        },
+        "city": { "type": ["string", "null"] },
+        "state": { "type": ["string", "null"] }
+      }
+    },
+    "employment_type": {
+      "type": ["string", "null"],
+      "enum": ["full_time", "part_time", "contract", "internship", null]
+    },
+    "sponsors_h1b": {
+      "type": ["boolean", "null"],
+      "description": "true = sponsors, false = explicitly does not, null = not stated."
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "The JD's hard requirement terms, in the JD's EXACT spelling: technologies, methods, and domain nouns a recruiter's ATS would string-match (e.g. \"REST APIs\", \"CI/CD\", \"Go\"). Broader than the stack fields (which stay technology-only). Copy each term verbatim from the posting; never normalize (\"Go\" stays \"Go\", not \"Golang\"). Read by ops/keyword_check.py for the deterministic keyword report; NOT fed to the writer."
+    },
+    "required_stack": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Required technologies as named in the JD. Extracted keywords for tracking, NOT a contract and NOT fed to the writer."
+    },
+    "preferred_stack": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Preferred/nice-to-have technologies. Extracted keywords for tracking, NOT a contract and NOT fed to the writer."
+    },
+    "salary_range": {
+      "type": ["string", "null"],
+      "description": "As stated in the JD; null if not stated."
+    },
+    "years_required_min": {
+      "type": ["number", "null"],
+      "description": "Minimum years of experience stated (the low end of any range); null if not stated."
+    }
+  }
+}

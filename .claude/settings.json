@@ -1,0 +1,20 @@
+{
+  "hooks": {},
+  "permissions": {
+    "allow": [
+      "Bash(python3 ops/jd_fetch.py *)",
+      "Bash(python3 ops/new_workspace.py *)",
+      "Bash(python3 ops/bank_ingest.py *)",
+      "Bash(python3 ops/bank_lint.py *)",
+      "Bash(python3 ops/finalize.py)",
+      "Bash(python3 ops/finalize.py *)",
+      "Bash(python3 ops/env_check.py)",
+      "Bash(python3 ops/keyword_check.py *)",
+      "Bash(python3 ops/render.py *)",
+      "Bash(bash .claude/hooks/check.sh *)",
+      "Bash(mktemp *)",
+      "Bash(pdfinfo *)",
+      "Bash(pdftotext *)"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+# Your career data: nothing in bank/ ships except the empty sources/ drop box.
+bank/*
+!bank/sources/
+bank/sources/*
+!bank/sources/.gitkeep
+archive/
+
+# Per-application archive (personal data; the workspaces live and stay here).
+# The folder itself ships empty so clones see where runs land.
+applications/*
+!applications/.gitkeep
+
+# Transient build/gate quarantine (lint flags, gate counters, format_escape.md, LaTeX aux, pdf)
+# lives in <workspace>/.build/; never committed, for any workspace.
+.build/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+
+# Claude local/runtime state
+.claude/settings.local.json
+.claude/agent-memory/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
