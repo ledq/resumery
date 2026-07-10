@@ -57,8 +57,9 @@ two jobs never collides.
 
 1. **Clone the repo** and open Claude Code in the project folder.
 
-2. **Build your evidence bank.** Put one or more of your existing resumes (PDF, Markdown,
-   plain text, or LaTeX) into `bank/sources/`, then run:
+2. **Build your evidence bank.** Put your existing resumes and any other career material
+   (project notes, brag docs, performance reviews; PDF, Markdown, plain text, or LaTeX)
+   into `bank/sources/`, then run:
 
    ```
    /onboard
@@ -74,6 +75,28 @@ two jobs never collides.
 That's it, you're ready to tailor. (Prefer to write the bank by hand? Create
 `bank/experience_bank.md` and `bank/profile.json` following `spec/bank_format.md`, then run
 `/bank-map`.)
+
+## The bank
+
+`bank/` is the asset everything else consumes. It holds your career in two layers, an
+index, and the raw material:
+
+- `experience_bank.md`, the evidence layer: every role and project as units of real
+  work, with the facts behind each (systems, decisions, numbers, tools) in plain text
+  under their real names. It is the only source of facts for resume claims; if an
+  outcome isn't written here, no resume will mention it.
+- `profile.json`, the record layer: name, contact, employers, dates, titles and their
+  honest variants, education. Only the renderer reads it, the model never does, and
+  where the two files state the same fact, this one wins.
+- `evidence_map.md`, a derived index the drafter plans from: which evidence covers
+  which kind of requirement, and what the bank simply doesn't have. `/bank-map`
+  rebuilds it after you edit the bank by hand.
+- `sources/`, the resumes and notes you onboarded, kept as they arrived.
+
+The shape is inspired by [Karpathy's LLM wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f):
+immutable sources beneath an LLM-maintained knowledge base, here with your career as
+the domain. The bank compounds; each role, project, or number you add is material
+every future resume can draw on. `spec/bank_format.md` is the contract.
 
 ## Tailoring a resume
 
@@ -114,28 +137,30 @@ and what to be ready to speak to. Nothing is ever papered over.
 Re-running `/tailor` on the same posting reuses its folder. `applications/index.md` tracks
 everything you've tailored.
 
-## The rule: claims vs. framing
 
-Everything on a generated resume traces back to your bank. The pipeline draws a hard line:
+## Where this is going
 
-- **Claims** are checkable facts: titles, employers, dates, whether an accomplishment
-  happened, the numbers behind it. These must be true, always. This layer has no wiggle room.
-  Code fills it straight from your record; the model never writes your dates or employers.
-- **Framing** is how true work is presented: which experience leads, which bullets are
-  chosen, the words describing real work. This is optimized freely for each posting, down
-  to matching the posting's spelling of a skill you really have ("Go (Golang)"); ATS
-  software matches strings, and which variant of a true name you print costs nothing in truth.
+The bank is the asset; most of what's ahead is new consumers of the same truth, each
+read-only over the bank and held to the same grounding gate. Rough order of interest,
+not a schedule:
 
-Reframing your real experience to fit a job is the whole point. Inventing experience,
-outcomes, or numbers is the one thing the system will not do; an independent grounding
-check gates every claim against your bank before a resume ships.
+- **More templates.** The renderer's template contract is small and documented
+  (`ops/templates/README.md`).
+- **Cover letters and application answers.** "Describe a time you..." boxes are bank
+  queries: the strongest true story, framed to the question.
+- **JD triage.** Score how well the bank covers a posting before spending a full run
+  on it.
+- **Premade resumes.** A standing set of archetype-tailored resumes for when there is
+  no time to tailor.
+- **Form filling.** Map known facts into the application form, flag every field it
+  can't back, and stop at the submit button; submitting stays human.
+- **A local web view** over the bank and the application ledger, with outcome tracking.
 
 ## Your data stays yours
 
 Your bank and your applications are personal, and the repo is configured to never commit
 them: `bank/`, `applications/`, and anything derived from them are git-ignored. What lives
-in version control is the *tool* (prompts, scripts, schemas), never your career history or
-who you applied to. If you fork or publish this repo, your data does not go with it.
+in version control is the *tool* (prompts, scripts, schemas).
 
 ## Project layout
 
