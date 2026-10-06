@@ -41,9 +41,10 @@ ALIASES = {v: g for g in ALIAS_GROUPS for v in g}
 
 def pattern(term):
     # Word boundaries that survive tech names: "go" never matches "golang" or
-    # "Django"; "c" never matches "c++" or "c#"; "js" never matches "node.js".
+    # "Django"; "c" never matches "c++" or "c#"; "js" never matches "node.js";
+    # "s3" never matches "ESP32-S3".
     return re.compile(
-        r"(?<![A-Za-z0-9+#.])" + re.escape(term) + r"(?![A-Za-z0-9+#])",
+        r"(?<![A-Za-z0-9+#.\-])" + re.escape(term) + r"(?![A-Za-z0-9+#])",
         re.IGNORECASE,
     )
 
